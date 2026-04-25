@@ -15,8 +15,20 @@ def trigger_alert(
 
     status = result["status"]
 
-
+    
     # alert rules
+
+    # strongest evidence case
+    
+    if status=="Watermark Verified":
+        return {
+        "alert":True,
+        "severity":"HIGH",
+        "reason":"Protected watermarked asset detected",
+        "source":source_name,
+        "detection":result
+        }
+    
     if authorized:
         return {
         "alert":False,
