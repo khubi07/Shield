@@ -1,6 +1,558 @@
+# 🛡️ Shield — Digital Asset Protection System (MVP)
+
+## Overview
+
+Shield is a hybrid digital asset protection system built for the **Google Solution Challenge** problem statement:
+
+**Protecting the Integrity of Digital Sports Media**
+
+It helps detect and flag unauthorized use of sports media using:
+
+* Invisible watermarking (proactive protection)
+* Multi-signal fingerprinting (reactive detection)
+* Misuse alerting and monitoring
+* Ownership verification and traceability
+
+---
+
+# Problem We Are Solving
+
+Sports organizations publish high-value digital media (photos, highlights, graphics).
+
+Problems:
+
+* Unauthorized reposting
+* Digital piracy
+* Misappropriation of media
+* Modified copies (cropped, meme overlays, compression)
+* Hard to prove ownership at scale
+
+Shield addresses this using a layered verification pipeline.
+
+---
+
+# Core Architecture
+
+## Detection Pipeline
+
+```text
+Suspicious Media Input
+│
+├── Step 1: Watermark Verification
+│      If embedded watermark exists:
+│         → Ownership Confirmed
+│         → High Severity Alert
+│
+└── Step 2: Fingerprint Matching (fallback)
+       ├── pHash Similarity
+       ├── ORB Feature Matching
+       └── Histogram Similarity
+
+Combined Confidence Score
+│
+├── Likely Match
+├── Needs Review
+└── No Match
+
+↓
+Authorization Check
+↓
+Alert Generation
+```
+
+---
+
+# Key Features
+
+## 1. Asset Registration
+
+Upload original media and:
+
+* Generate invisible watermark
+* Generate content fingerprint
+* Register protected asset
+
+---
+
+## 2. Watermark Protection
+
+MVP uses:
+
+* LSB invisible watermarking
+
+Embedded watermark:
+
+* `SHIELD` (placeholder for MVP)
+
+Future:
+
+* Frequency-domain watermarking (DCT/DWT)
+
+---
+
+## 3. Multi-Signal Fingerprinting
+
+Uses 3 signals:
+
+### a) Perceptual Hash (pHash)
+
+Detects:
+
+* Similar images
+* Compression changes
+* Minor edits
+
+---
+
+### b) ORB Feature Matching
+
+Detects:
+
+* Structural similarity
+* Crops
+* Keypoint overlap
+
+---
+
+### c) Histogram Similarity
+
+Detects:
+
+* Visual/color distribution similarity
+* Some edited versions
+
+---
+
+## Combined Similarity Score
+
+Weighted ensemble:
+
+```python
+final_score = (
+ pHash*0.3 +
+ ORB*0.3 +
+ Histogram*0.4
+)
+```
+
+Thresholds:
+
+* > =75 → Likely Match
+* 55–75 → Needs Review
+* <55 → No Match
+
+---
+
+## 4. Alert Engine
+
+Severity levels:
+
+### HIGH
+
+Triggered if:
+
+* Watermark Verified
+* Strong unauthorized match
+
+---
+
+### MEDIUM
+
+Triggered if:
+
+* Suspicious modified content needs review
+
+---
+
+## 5. Monitoring Scan (Simulated Content Discovery)
+
+Current MVP simulates discovered external content:
+
+Cases tested:
+
+* Watermarked misuse
+* Modified suspicious reuse
+* Authorized reuse
+* Unrelated content (negative test)
+
+---
+
+# Current Project Structure
+
+```bash
+Shield/
+│
+├── app/
+│   ├── __init__.py
+│   │
+│   ├── uploads/
+│   │
+│   └── services/
+│       ├── __init__.py
+│       ├── fingerprint.py
+│       ├── watermark.py
+│       ├── matcher.py
+│       ├── alerts.py
+│       └── scanner.py
+│
+├── main.py
+├── requirements.txt
+└── README.md
+```
+
+---
+
+# Backend Modules
+
+## fingerprint.py
+
+Contains:
+
+* pHash similarity
+* ORB matching
+* Histogram similarity
+* Combined scoring
+
+---
+
+## watermark.py
+
+Contains:
+
+* Watermark embedding
+* Watermark extraction
+* Watermark verification
+
+---
+
+## matcher.py
+
+Decision engine:
+
+Flow:
+
+```text
+Check watermark first
+If found:
+  Watermark Verified
+Else:
+  Run fingerprint similarity
+```
+
+---
+
+## alerts.py
+
+Generates:
+
+* High severity alerts
+* Medium review alerts
+* Authorized usage pass-through
+
+---
+
+## scanner.py
+
+Simulates monitored external content feed.
+
+---
+
+# API Endpoints
+
+## Register Asset
+
+```http
+POST /register-asset
+```
+
+Registers media and embeds watermark.
+
+---
+
+## Check Originality
+
+```http
+POST /check-originality
+```
+
+Checks suspicious media.
+
+Possible outputs:
+
+Watermark route:
+
+```json
+{
+ "status":"Watermark Verified",
+ "ownership":"Confirmed"
+}
+```
+
+Fingerprint route:
+
+```json
+{
+ "combined":62.98,
+ "status":"Needs Review"
+}
+```
+
+---
+
+## Monitoring Scan
+
+```http
+GET /run-scan
+```
+
+Returns simulated alerts.
+
+---
+
+## Health Check
+
+```http
+GET /
+```
+
+Returns:
+
+```json
+{
+ "status":"API Running"
+}
+```
+
+---
+
+# Tech Stack
+
+## Backend
+
+* Python
+* FastAPI
+* Uvicorn
+
+---
+
+## Computer Vision
+
+* OpenCV
+* Pillow
+* ImageHash
+* NumPy
+
+---
+
+## Detection Techniques
+
+* LSB Watermarking
+* Perceptual Hashing
+* ORB Feature Matching
+* Histogram Similarity
+
+---
+
+# Installation
+
+## Clone Repo
+
+```bash
+git clone <https://github.com/khubi07/Shield.git>
+cd Shield
+```
+
+---
+
+## Create Virtual Environment
+
+### Windows
+
+```bash
 python -m venv venv
+venv\Scripts\activate
+```
+
+### Mac/Linux
+
+```bash
+python3 -m venv venv
 source venv/bin/activate
+```
 
+---
+
+## Install Dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
+---
+
+## Run Backend
+
+```bash
 uvicorn main:app --reload
+```
+
+API:
+
+```text
+http://127.0.0.1:8000
+```
+
+Swagger Docs:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+---
+
+# Test Modules Individually
+
+Run package modules:
+
+```bash
+python -m app.services.watermark
+```
+
+```bash
+python -m app.services.matcher
+```
+
+```bash
+python -m app.services.scanner
+```
+
+Important:
+Use:
+
+```bash
+python -m app.services.module_name
+```
+
+not:
+
+```bash
+python file.py
+```
+
+for package imports.
+
+---
+
+# Example Validation Results
+
+## Same Image
+
+```text
+100%
+Likely Match
+```
+
+---
+
+## Modified Copy
+
+```text
+62.98%
+Needs Review
+```
+
+---
+
+## Watermarked Repost
+
+```text
+Watermark Verified
+HIGH Alert
+```
+
+---
+
+## Different Image
+
+```text
+No Match
+No Alert
+```
+
+---
+
+# Frontend Plan (Upcoming)
+
+React dashboard will include:
+
+* Dashboard
+* Register Asset
+* Check Originality
+* Alerts Monitoring
+* Evidence View
+
+---
+
+# Future Scope
+
+Planned upgrades:
+
+## Watermarking
+
+* DCT watermarking
+* DWT watermarking
+* Robust watermark survival
+
+---
+
+## Detection
+
+* Deep visual embeddings
+* Video fingerprinting
+* Better transformation analysis
+
+---
+
+## Monitoring
+
+* Real web crawling
+* Social platform APIs
+* Real-time alerts
+
+---
+
+# Team Notes
+
+## Current MVP Focus
+
+We intentionally prioritize:
+
+* Working prototype
+* Clear detection pipeline
+* Demonstrable proof-of-concept
+
+Over:
+
+* Production-scale crawling
+* Enterprise-grade watermarking
+* Heavy ML models
+
+
+## Demo / Pitch
+
+Focus:
+
+* Problem framing
+* Solution walkthrough
+* Future roadmap
+
+---
+
+# Elevator Pitch
+
+Shield creates a digital identity layer for sports media using invisible watermarking and multi-signal content fingerprinting, enabling organizations to authenticate media, detect unauthorized reuse, and monitor content propagation in near real-time.
+
+
+---
+
+Built for Google Solution Challenge 🚀 by team Shield
