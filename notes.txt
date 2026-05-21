@@ -1,3 +1,15 @@
+----- TO RUN BACKEND---
 uvicorn main:app --reload
+
+---- TO RUN FRONTEND ----
+cd frontend
+npm run dev
+
+--- to move to main ----
+git checkout main
+
 python -m app.services.matcher (just in case if service files are not running)
 use this method
+
+venv\Scripts\activate
+to check branch - git branch -a 

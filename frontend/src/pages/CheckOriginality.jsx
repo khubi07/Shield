@@ -8,6 +8,8 @@ function CheckOriginality() {
 
   const [checked, setChecked] = useState(false)
 
+  const [loading, setLoading] = useState(false)
+
   return (
     <>
 
@@ -66,17 +68,39 @@ function CheckOriginality() {
       {
         image && (
           <button
-            onClick={() => setChecked(true)}
-            className="
-              mt-8
-              bg-blue-500
-              px-6
-              py-3
-              rounded-xl
-              hover:bg-blue-600
-            "
-          >
-            Check Originality
+              disabled={loading}
+
+              onClick={() => {
+
+                setChecked(false)
+
+                setLoading(true)
+
+                setTimeout(() => {
+
+                  setLoading(false)
+
+                  setChecked(true)
+
+                }, 2000)
+
+              }}
+
+              className="
+                mt-8
+                bg-blue-500
+                px-6
+                py-3
+                rounded-xl
+                hover:bg-blue-600
+                disabled:opacity-50
+              "
+            >
+            {
+              loading
+                ? "Analyzing..."
+                : "Check Originality"
+            }
           </button>
         )
       }
