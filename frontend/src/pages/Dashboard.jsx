@@ -28,9 +28,6 @@ function Dashboard() {
   ]
 
   return (
-    <div className="flex bg-gradient-to-br from-black via-zinc-950 to-black min-h-screen">
-
-      <Sidebar />
 
       <div className="flex-1 p-10 text-white">
 
@@ -140,8 +137,6 @@ function Dashboard() {
         </div>
 
       </div>
-
-    </div>
   )
 }
 

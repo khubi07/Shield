@@ -7,12 +7,7 @@ function RegisterAsset() {
   const [registered, setRegistered] = useState(false)
 
   return (
-    <div className="
-      min-h-screen
-      bg-black
-      text-white
-      p-10
-    ">
+    <div>
 
       <h1 className="text-4xl font-bold">
         Register Asset

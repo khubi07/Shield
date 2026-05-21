@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 function Sidebar() {
   return (
     <div className="w-64 h-screen bg-zinc-900 text-white p-5">
@@ -6,17 +7,50 @@ function Sidebar() {
       </h1>
 
       <ul className="space-y-4">
-        <li className="bg-blue-500 p-3 rounded-lg">
+        <Link
+        to="/"
+        className="
+          flex
+          items-center
+          gap-3
+          bg-blue-500
+          p-4
+          rounded-2xl
+          cursor-pointer
+        "
+      >
           Dashboard
-        </li>
+        </Link>
 
-        <li className="hover:bg-zinc-800 p-3 rounded-lg cursor-pointer">
+        <Link
+          to="/register-asset"
+          className="
+            flex
+            items-center
+            gap-3
+            bg-blue-500
+            p-4
+            rounded-2xl
+            cursor-pointer
+          "
+        >
           Register Asset
-        </li>
+        </Link>
 
-        <li className="hover:bg-zinc-800 p-3 rounded-lg cursor-pointer">
+        <Link
+        to="/check-originality"
+        className="
+          flex
+          items-center
+          gap-3
+          bg-blue-500
+          p-4
+          rounded-2xl
+          cursor-pointer
+        "
+      >
           Check Originality
-        </li>
+        </Link>
 
         <li className="hover:bg-zinc-800 p-3 rounded-lg cursor-pointer">
           Alerts
