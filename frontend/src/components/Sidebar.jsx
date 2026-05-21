@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
+import navigation from "../data/navigation"
 function Sidebar() {
   return (
     <div className="w-64 h-screen bg-zinc-900 text-white p-5">
@@ -6,56 +7,45 @@ function Sidebar() {
         SHIELD
       </h1>
 
-      <ul className="space-y-4">
-        <Link
-        to="/"
-        className="
-          flex
-          items-center
-          gap-3
-          bg-blue-500
-          p-4
-          rounded-2xl
-          cursor-pointer
-        "
-      >
-          Dashboard
-        </Link>
+      <nav>
 
-        <Link
-          to="/register-asset"
-          className="
-            flex
-            items-center
-            gap-3
-            bg-blue-500
-            p-4
-            rounded-2xl
-            cursor-pointer
-          "
-        >
-          Register Asset
-        </Link>
+  <ul className="space-y-3">
 
-        <Link
-        to="/check-originality"
-        className="
-          flex
-          items-center
-          gap-3
-          bg-blue-500
-          p-4
-          rounded-2xl
-          cursor-pointer
-        "
-      >
-          Check Originality
-        </Link>
+    {
+      navigation.map((item) => (
 
-        <li className="hover:bg-zinc-800 p-3 rounded-lg cursor-pointer">
-          Alerts
+        <li key={item.path}>
+
+          <NavLink
+            to={item.path}
+
+            className={({ isActive }) => `
+              flex
+              items-center
+              gap-3
+              p-4
+              rounded-2xl
+              transition-all
+
+              ${isActive
+                ? "bg-blue-500 text-white"
+                : "hover:bg-zinc-900 text-zinc-300"
+              }
+            `}
+          >
+
+            {item.label}
+
+          </NavLink>
+
         </li>
-      </ul>
+
+      ))
+    }
+
+  </ul>
+
+</nav>
     </div>
   )
 }

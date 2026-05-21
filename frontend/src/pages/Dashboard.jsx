@@ -3,6 +3,8 @@ import { useState } from "react"
 import Sidebar from "../components/Sidebar"
 import StatCard from "../components/StatsCard"
 import AlertCard from "../components/AlertCard"
+import alerts from "../data/alerts"
+import PageHeader from "../components/PageHeader"
 
 function Dashboard() {
 
@@ -10,42 +12,15 @@ function Dashboard() {
 
   const [showThreat, setShowThreat] = useState(false)
 
-  const alerts = [
-    {
-      title: "Watermarked repost detected",
-      severity: "HIGH"
-    },
-
-    {
-      title: "Modified suspicious content",
-      severity: "MEDIUM"
-    },
-
-    {
-      title: "Authorized partner usage",
-      severity: "LOW"
-    }
-  ]
 
   return (
 
       <div className="flex-1 p-10 text-white">
 
-        <h1 className="
-          text-5xl
-          font-bold
-          bg-gradient-to-r
-          from-white
-          to-zinc-400
-          bg-clip-text
-          text-transparent
-        ">
-          Shield Dashboard
-        </h1>
-
-        <p className="text-zinc-400 mt-3">
-          Monitor and protect digital sports assets.
-        </p>
+        <PageHeader
+          title="Shield Dashboard"
+          description="Monitor and protect digital sports assets."
+        />
 
         <div className="flex gap-6 mt-10 flex-wrap">
 
@@ -127,9 +102,10 @@ function Dashboard() {
           {
             alerts.map((alert, index) => (
               <AlertCard
-                key={index}
+                key={alert.id}
                 title={alert.title}
                 severity={alert.severity}
+                description={alert.description}
               />
             ))
           }
@@ -141,3 +117,4 @@ function Dashboard() {
 }
 
 export default Dashboard
+           

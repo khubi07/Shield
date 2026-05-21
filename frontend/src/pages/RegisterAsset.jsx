@@ -94,13 +94,10 @@ function RegisterAsset() {
             max-w-2xl
             ">
 
-            <h2 className="text-2xl font-bold text-green-400">
-                Asset Registered Successfully
-            </h2>
-
-            <p className="text-zinc-300 mt-3">
-                Invisible watermark embedded and fingerprint generated.
-            </p>
+            <PageHeader
+              title="Register Asset"
+              description="Upload and protect sports media assets."
+            />
 
             </div>
         )

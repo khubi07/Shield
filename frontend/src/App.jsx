@@ -5,7 +5,7 @@ import {
 } from "react-router-dom"
 
 import MainLayout from "./layouts/MainLayout"
-
+import Alerts from "./pages/Alerts"
 import Dashboard from "./pages/Dashboard"
 import RegisterAsset from "./pages/RegisterAsset"
 import CheckOriginality from "./pages/CheckOriginality"
@@ -32,6 +32,11 @@ function App() {
           <Route
             path="/check-originality"
             element={<CheckOriginality />}
+          />
+
+          <Route
+            path="/alerts"
+            element={<Alerts />}
           />
 
         </Routes>
