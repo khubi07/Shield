@@ -1,8 +1,12 @@
 import { useState } from "react"
+import api from "../services/api"
+import PageHeader from "../components/PageHeader"
 
 function RegisterAsset() {
 
   const [image, setImage] = useState(null)
+
+  const [loading, setLoading] = useState(false)
 
   const [registered, setRegistered] = useState(false)
 
@@ -67,17 +71,41 @@ function RegisterAsset() {
         {
         image && (
             <button
-            onClick={() => setRegistered(true)}
-            className="
-                mt-8
-                bg-blue-500
-                px-6
-                py-3
-                rounded-xl
-                hover:bg-blue-600
-            "
-            >
-            Register Asset
+                disabled={loading}
+                onClick={async () => {
+                  try {
+                    setRegistered(false)
+                    setLoading(true)
+                    const formData = new FormData()
+                    formData.append("file", image)
+                    await api.post(
+                      "/register-asset",
+                      formData
+                    )
+                    setRegistered(true)
+                  }
+                  catch (error) {
+                    console.error(error)
+                  }
+                  finally {
+                    setLoading(false)
+                  }
+                }}
+                className="
+                  mt-8
+                  bg-blue-500
+                  px-6
+                  py-3
+                  rounded-xl
+                  hover:bg-blue-600
+                  disabled:opacity-50
+                "
+              >
+                {
+                  loading
+                    ? "Registering..."
+                    : "Register Asset"
+                }
             </button>
         )
         }

@@ -4,12 +4,21 @@ import os
 import uuid
 from app.services.matcher import check_originality
 from app.services.scanner import run_monitoring_scan
+from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI(
     title="Digital Asset Protection API"
 )
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 UPLOAD_DIR = "app/uploads"
 LAST_UPLOADED_ASSET = None
 
