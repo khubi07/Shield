@@ -11,11 +11,11 @@ function CheckOriginality() {
 
   const [loading, setLoading] = useState(false)
 
-   // Stores backend matcher response
-const [result, setResult] = useState(null)
+    // Stores backend matcher response
+  const [result, setResult] = useState(null)
 
- // Stores request failure message
-const [error, setError] = useState("")
+  // Stores request failure message
+  const [error, setError] = useState("")
 
   return (
     <>

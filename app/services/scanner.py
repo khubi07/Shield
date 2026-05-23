@@ -21,13 +21,9 @@ def run_monitoring_scan():
    "source":"Official Partner",
    "image":"app/uploads/org.png",
    "authorized":True
- },
-
- {
-   "source":"Random Website",
-   "image":"app/uploads/unrelated.jpg",
-   "authorized":False
  }
+
+ 
 
 ]
 
