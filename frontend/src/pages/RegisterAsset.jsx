@@ -8,18 +8,17 @@ function RegisterAsset() {
 
   const [loading, setLoading] = useState(false)
 
-  const [registered, setRegistered] = useState(false)
+  const [error, setError] = useState("")
+
+  const [registrationResult, setRegistrationResult] = useState(null)
 
   return (
     <div>
 
-      <h1 className="text-4xl font-bold">
-        Register Asset
-      </h1>
-
-      <p className="text-zinc-400 mt-3">
-        Upload and protect sports media assets.
-      </p>
+      <PageHeader
+            title="Register Asset"
+            description="Upload and protect sports media assets."
+          />
 
       <div className="
         mt-10
@@ -74,19 +73,29 @@ function RegisterAsset() {
                 disabled={loading}
                 onClick={async () => {
                   try {
-                    setRegistered(false)
+                    setRegistrationResult(null)
+                    setError("")
                     setLoading(true)
                     const formData = new FormData()
                     formData.append("file", image)
-                    await api.post(
+                    const response = await api.post(
                       "/register-asset",
                       formData
                     )
-                    setRegistered(true)
+
+                    console.log(response.data)
+
+                    setRegistrationResult(response.data)
                   }
+
                   catch (error) {
                     console.error(error)
+
+                  setError(
+                    "Failed to register asset. Please try again."
+                  )
                   }
+
                   finally {
                     setLoading(false)
                   }
@@ -111,25 +120,63 @@ function RegisterAsset() {
         }
 
         {
-        registered && (
-            <div className="
-            mt-8
-            bg-green-950
-            border
-            border-green-500
-            p-6
-            rounded-2xl
-            max-w-2xl
+          error && (
+
+            <section className="
+              mt-8
+              bg-red-950
+              border
+              border-red-500
+              p-6
+              rounded-2xl
+              max-w-2xl
             ">
 
-            <PageHeader
-              title="Register Asset"
-              description="Upload and protect sports media assets."
-            />
+              <h2 className="text-2xl font-bold text-red-400">
+                Registration Failed
+              </h2>
 
-            </div>
-        )
+              <p className="text-zinc-300 mt-3">
+                {error}
+              </p>
+
+            </section>
+          )
         }
+
+        <>
+          {
+            registrationResult && (
+
+              <section className="
+                mt-8
+                bg-green-950
+                border
+                border-green-500
+                p-6
+                rounded-2xl
+                max-w-2xl
+              ">
+
+                <h2 className="text-2xl font-bold text-green-400">
+                  {registrationResult.message}
+                </h2>
+
+                <p className="text-zinc-300 mt-3">
+
+                  Protected Asset:
+
+                  <span className="font-semibold ml-2">
+                    {registrationResult.asset_name}
+                  </span>
+
+                </p>
+
+              </section>
+            )
+          }
+
+        </>
     </div>
   )
 }

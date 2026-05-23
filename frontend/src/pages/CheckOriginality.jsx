@@ -1,6 +1,7 @@
 import { useState } from "react"
 import ConfidenceBar from "../components/originality/ConfidenceBar"
 import PageHeader from "../components/PageHeader"
+import api from "../services/api"
 
 function CheckOriginality() {
 
@@ -9,6 +10,12 @@ function CheckOriginality() {
   const [checked, setChecked] = useState(false)
 
   const [loading, setLoading] = useState(false)
+
+   // Stores backend matcher response
+const [result, setResult] = useState(null)
+
+ // Stores request failure message
+const [error, setError] = useState("")
 
   return (
     <>
@@ -70,21 +77,58 @@ function CheckOriginality() {
           <button
               disabled={loading}
 
-              onClick={() => {
+              onClick={async () => {
 
-                setChecked(false)
+                  try {
 
-                setLoading(true)
+                    // Reset previous UI states
+                    setError("")
+                    setChecked(false)
+                    setResult(null)
 
-                setTimeout(() => {
+                    // Start loading UI
+                    setLoading(true)
 
-                  setLoading(false)
+                    // Prepare multipart image upload
+                    const formData = new FormData()
 
-                  setChecked(true)
+                    formData.append("file", image)
 
-                }, 2000)
+                    // Send suspicious image to backend
+                    const response = await api.post(
+                      "/check-originality",
+                      formData
+                    )
 
-              }}
+                    // Debug backend response
+                    console.log(response.data)
+
+                    // Store backend response
+                    setResult(response.data)
+
+                    // Show result section
+                    setChecked(true)
+
+                  }
+
+                  catch (error) {
+
+                    console.error(error)
+
+                    setError(
+                      "Originality analysis failed."
+                    )
+
+                  }
+
+                  finally {
+
+                    // Stop loading state
+                    setLoading(false)
+
+                  }
+
+                }}
 
               className="
                 mt-8
@@ -106,6 +150,31 @@ function CheckOriginality() {
       }
 
       {
+        error && (
+
+          <section className="
+            mt-8
+            bg-red-950
+            border
+            border-red-500
+            p-6
+            rounded-2xl
+            max-w-2xl
+          ">
+
+            <h2 className="text-2xl font-bold text-red-400">
+              Analysis Failed
+            </h2>
+
+            <p className="text-zinc-300 mt-3">
+              {error}
+            </p>
+
+          </section>
+        )
+      }
+
+      {
         checked && (
 
           <section className="
@@ -119,7 +188,7 @@ function CheckOriginality() {
           ">
 
             <h2 className="text-3xl font-bold text-green-400">
-              Likely Match
+              {result.status}
             </h2>
 
             <p className="text-zinc-400 mt-3">
@@ -133,22 +202,38 @@ function CheckOriginality() {
               </h3>
 
               <div className="space-y-5">
+                  <div className="
+                    mt-6
+                    bg-zinc-800
+                    p-5
+                    rounded-2xl
+                  ">
+
+                    <h3 className="text-lg text-zinc-400">
+                      Combined Match Score
+                    </h3>
+
+                    <p className="text-4xl font-bold mt-3 text-blue-400">
+                      {result.combined}%
+                    </p>
+
+                  </div>
 
                 <ConfidenceBar
                   label="pHash Similarity"
-                  value={91}
+                  value={result.phash}
                   color="bg-blue-500"
                 />
 
                 <ConfidenceBar
                   label="ORB Similarity"
-                  value={84}
+                  value={result.orb}
                   color="bg-green-500"
                 />
 
                 <ConfidenceBar
                   label="Histogram Similarity"
-                  value={96}
+                  value={result.histogram}
                   color="bg-purple-500"
                 />
 
