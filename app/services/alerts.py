@@ -18,6 +18,14 @@ def trigger_alert(
     
     # alert rules
 
+    # Authorized usage bypass
+    if authorized:
+
+        return {
+            "alert":False,
+            "message":"Authorized usage",
+            "detection":result
+        }
     # strongest evidence case
     
     if status=="Watermark Verified":
@@ -26,13 +34,6 @@ def trigger_alert(
         "severity":"HIGH",
         "reason":"Protected watermarked asset detected",
         "source":source_name,
-        "detection":result
-        }
-    
-    if authorized:
-        return {
-        "alert":False,
-        "message":"Authorized usage",
         "detection":result
         }
     
