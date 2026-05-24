@@ -192,7 +192,14 @@ function CheckOriginality() {
             </h2>
 
             <p className="text-zinc-400 mt-3">
-              Watermark Status: Verified
+              Watermark Status:
+              <span className="ml-2">
+                {
+                  result.status === "Watermark Verified"
+                    ? "Verified"
+                    : "Not Detected"
+                }
+              </span>
             </p>
 
             <div className="mt-8">

@@ -89,6 +89,14 @@ def extract_watermark(
 
     return extracted
 
+def verify_watermark(image_path):
+
+    extracted = extract_watermark(
+        image_path
+    )
+
+    return extracted == "SHIELD"
+
 def test_watermark():
 
     embed_watermark(

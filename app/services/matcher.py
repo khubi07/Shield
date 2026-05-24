@@ -9,7 +9,9 @@ def check_originality(img1,img2):
 
     # First check watermark
     try:
-        wm = extract_watermark(img2)
+        wm = extract_watermark(img2).strip()
+
+        print("Extracted watermark:", wm)
 
         if wm=="SHIELD":
             return {
