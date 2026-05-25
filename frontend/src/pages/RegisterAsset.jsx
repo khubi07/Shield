@@ -12,6 +12,15 @@ function RegisterAsset() {
 
   const [registrationResult, setRegistrationResult] = useState(null)
 
+  // Stores asset owner
+  const [ownerName, setOwnerName] = useState("")
+
+  // Stores sports category
+  const [sportType, setSportType] = useState("")
+
+  // Stores media type
+  const [assetType, setAssetType] = useState("")
+
   return (
     <div>
 
@@ -21,28 +30,87 @@ function RegisterAsset() {
           />
 
       <div className="
-        mt-10
-        bg-zinc-900
-        p-8
-        rounded-2xl
-        max-w-2xl
-      ">
+          mt-10
+          bg-zinc-900
+          p-8
+          rounded-2xl
+          max-w-2xl
+        ">
 
-        <input
-          type="file"
-          accept="image/*"
-          className="
-            block
-            w-full
-            text-sm
-            text-zinc-400
-          "
-          onChange={(e) => {
-            setImage(e.target.files[0])
-}}
-        />
+          {/* Owner name */}
+          <input
+            type="text"
+            placeholder="Owner Name"
+            value={ownerName}
+            onChange={(e) => {
+              setOwnerName(e.target.value)
+            }}
+            className="
+              w-full
+              mb-4
+              p-3
+              rounded-xl
+              bg-zinc-800
+              text-white
+            "
+          />
 
-      </div>
+          {/* Sport type */}
+          <input
+            type="text"
+            placeholder="Sport Type"
+            value={sportType}
+            onChange={(e) => {
+              setSportType(e.target.value)
+            }}
+            className="
+              w-full
+              mb-4
+              p-3
+              rounded-xl
+              bg-zinc-800
+              text-white
+            "
+          />
+
+          {/* Asset category */}
+          <input
+            type="text"
+            placeholder="Asset Type"
+            value={assetType}
+            onChange={(e) => {
+              setAssetType(e.target.value)
+            }}
+            className="
+              w-full
+              mb-4
+              p-3
+              rounded-xl
+              bg-zinc-800
+              text-white
+            "
+          />
+
+          {/* File upload */}
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              if (e.target.files && e.target.files[0]) {
+                setImage(e.target.files[0])
+              }
+            }}
+            className="
+              w-full
+              mb-4
+              p-3
+              rounded-xl
+              bg-zinc-800
+              text-white
+            "
+          />
+
+        </div>
 
       {
         image && (
@@ -77,7 +145,18 @@ function RegisterAsset() {
                     setError("")
                     setLoading(true)
                     const formData = new FormData()
+                    // Upload image
                     formData.append("file", image)
+
+                    // Upload owner metadata
+                    formData.append("owner_name", ownerName)
+
+                    // Upload sports category
+                    formData.append("sport_type", sportType)
+
+                    // Upload media category
+                    formData.append("asset_type", assetType)
+                    
                     const response = await api.post(
                       "/register-asset",
                       formData

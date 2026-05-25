@@ -10,7 +10,7 @@ from app.database.models import Base
 from app.database.database import SessionLocal
 from app.database.models import Asset
 from app.services.watermark import embed_watermark
-
+from fastapi import Form
 
 app = FastAPI(
     title="Digital Asset Protection API"
@@ -38,8 +38,17 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 # Register Asset
 # ---------------------------------
 @app.post("/register-asset")
-async def register_asset(file: UploadFile = File(...)):
+async def register_asset(
 
+    file: UploadFile = File(...),
+
+    owner_name: str = Form(...),
+
+    sport_type: str = Form(...),
+
+    asset_type: str = Form(...)
+):
+    
     db = SessionLocal()
 
     global LAST_UPLOADED_ASSET
@@ -73,9 +82,16 @@ async def register_asset(file: UploadFile = File(...)):
         protected_path
 )
     # Create DB asset object
+    # Create DB asset object
     asset = Asset(
 
         filename=filename,
+
+        owner_name=owner_name,
+
+        sport_type=sport_type,
+
+        asset_type=asset_type,
 
         watermark_text="SHIELD",
 
