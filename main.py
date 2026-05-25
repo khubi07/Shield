@@ -159,6 +159,41 @@ def run_scan():
     return alerts
 
 
+# ---------------------------------
+# get assets 
+# ---------------------------------
+@app.get("/assets")
+def get_assets():
+
+    db = SessionLocal()
+
+    assets = db.query(Asset).all()
+
+    result = []
+
+    for asset in assets:
+
+        result.append({
+
+            "id": asset.id,
+
+            "filename": asset.filename,
+
+            "owner_name": asset.owner_name,
+
+            "sport_type": asset.sport_type,
+
+            "asset_type": asset.asset_type,
+
+            "protected_path": asset.protected_path,
+
+            "created_at": str(asset.created_at)
+        })
+
+    db.close()
+
+    return result
+
 @app.get("/")
 def root():
     return {

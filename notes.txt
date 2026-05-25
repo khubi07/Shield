@@ -11,5 +11,38 @@ git checkout main
 python -m app.services.matcher (just in case if service files are not running)
 use this method
 
+---activate venv---
 venv\Scripts\activate
 to check branch - git branch -a 
+
+---test api---
+http://127.0.0.1:8000/docs
+
+is my idea useless? because there are laws for copyright check
+
+That logic would imply:
+
+cybersecurity is useless because hacking is illegal
+plagiarism detectors are useless because plagiarism laws exist
+anti-piracy systems are useless because copyright laws exist
+
+Clearly false.
+
+my project is not "LAW'
+but its about - evidence + detection + monitoring infrastructure
+
+Organizations cannot practically detect and trace misuse at internet scale.
+
+Laws say:
+
+“You own the content.”
+
+But laws do NOT:
+
+monitor the internet
+detect reposts automatically
+identify modified copies
+provide evidence pipelines
+flag suspicious usage in real-time
+
+“We help organizations detect, verify, and investigate unauthorized reuse of digital media.”

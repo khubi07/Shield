@@ -1,6 +1,9 @@
 from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
+from sqlalchemy import DateTime
+
+from datetime import datetime
 
 from app.database.database import Base
 
@@ -16,6 +19,17 @@ class Asset(Base):
 
     filename = Column(String)
 
+    owner_name = Column(String)
+
+    sport_type = Column(String)
+
+    asset_type = Column(String)
+
     watermark_text = Column(String)
 
     protected_path = Column(String)
+
+    created_at = Column(
+        DateTime,
+        default=datetime.utcnow
+    )
