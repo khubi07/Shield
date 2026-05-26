@@ -9,43 +9,43 @@ function Sidebar() {
 
       <nav>
 
-  <ul className="space-y-3">
+      <ul className="space-y-3">
 
-    {
-      navigation.map((item) => (
+        {
+          navigation.map((item) => (
 
-        <li key={item.path}>
+            <li key={item.path}>
 
-          <NavLink
-            to={item.path}
+              <NavLink
+                to={item.path}
 
-            className={({ isActive }) => `
-              flex
-              items-center
-              gap-3
-              p-4
-              rounded-2xl
-              transition-all
+                className={({ isActive }) => `
+                  flex
+                  items-center
+                  gap-3
+                  p-4
+                  rounded-2xl
+                  transition-all
 
-              ${isActive
-                ? "bg-blue-500 text-white"
-                : "hover:bg-zinc-900 text-zinc-300"
-              }
-            `}
-          >
+                  ${isActive
+                    ? "bg-blue-500 text-white"
+                    : "hover:bg-zinc-900 text-zinc-300"
+                  }
+                `}
+              >
 
-            {item.label}
+                {item.label}
 
-          </NavLink>
+              </NavLink>
 
-        </li>
+            </li>
 
-      ))
-    }
+          ))
+        }
 
-  </ul>
+      </ul>
 
-</nav>
+      </nav>
     </div>
   )
 }

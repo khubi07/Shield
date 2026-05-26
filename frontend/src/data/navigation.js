@@ -18,6 +18,11 @@ const navigation = [
   {
     path: "/alerts",
     label: "Alerts"
+  },
+
+  {
+  label: "Suspicious Posts",
+  path: "/upload-suspicious-post"
   }
 
 ]

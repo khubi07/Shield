@@ -1,45 +1,42 @@
+from app.database.database import SessionLocal
+from app.database.models import Asset, SuspiciousPost
 from app.services.alerts import trigger_alert
 
 
 def run_monitoring_scan():
 
-    monitored_posts = [
+    # Open database session
+    db = SessionLocal()
 
- {
-   "source":"Watermarked Repost",
-   "image":"app/uploads/watermarked.png",
-   "authorized":False
- },
+    # Fetch protected assets
+    assets = db.query(Asset).all()
 
- {
-   "source":"Fan Page 1",
-   "image":"app/uploads/modified.jpg",
-   "authorized":False
- },
+    # Fetch suspicious monitored posts
+    posts = db.query(
+        SuspiciousPost
+    ).all()
+    alerts = []
 
- {
-   "source":"Official Partner",
-   "image":"app/uploads/org.png",
-   "authorized":True
- }
+    # Compare suspicious posts
+    # against protected assets
+    for asset in assets:
 
- 
+        for post in posts:
 
-]
+            result = trigger_alert(
 
-    alerts=[]
+                asset.protected_path,
 
-    for post in monitored_posts:
+                post.image_path,
 
-        result = trigger_alert(
-            "app/uploads/org.png",
-            post["image"],
-            post["source"],
-            post["authorized"]
-        )
+                post.source,
 
-        alerts.append(result)
+                post.authorized # type: ignore
+            )
 
+            alerts.append(result)
+    # Close database connection
+    db.close()
     return alerts
 
 

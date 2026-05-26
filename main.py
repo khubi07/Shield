@@ -9,6 +9,7 @@ from app.database.database import engine
 from app.database.models import Base
 from app.database.database import SessionLocal
 from app.database.models import Asset
+from app.database.models import SuspiciousPost
 from app.services.watermark import embed_watermark
 from fastapi import Form
 
@@ -209,6 +210,105 @@ def get_assets():
     db.close()
 
     return result
+
+# ---------------------------------
+# seed api
+# ---------------------------------
+@app.get("/seed-posts")
+def seed_posts():
+
+    db = SessionLocal()
+
+    # Fake monitored social media posts
+    posts = [
+
+        SuspiciousPost(
+
+            source="Fan Page 1",
+
+            image_path="app/uploads/modified.jpg",
+
+            authorized=False
+        ),
+
+        SuspiciousPost(
+
+            source="Official Partner",
+
+            image_path="app/uploads/org.png",
+
+            authorized=True
+        )
+    ]
+
+    # Store monitored posts
+    db.add_all(posts)
+
+    db.commit()
+
+    db.close()
+
+    return {
+        "message":"Posts seeded"
+    }
+
+# ---------------------------------
+# upload suspicious post
+# ---------------------------------
+@app.post("/upload-suspicious-post")
+async def upload_suspicious_post(
+
+    file: UploadFile = File(...),
+
+    source: str = Form(...),
+
+    authorized: bool = Form(...)
+):
+
+    db = SessionLocal()
+
+    # Store uploaded filename
+    filename = file.filename or "post.jpg"
+
+    # Create suspicious upload path
+    path = os.path.join(
+        UPLOAD_DIR,
+        filename
+    )
+
+    # Save uploaded image
+    with open(path, "wb") as buffer:
+
+        shutil.copyfileobj(
+            file.file,
+            buffer
+        )
+
+    # Create suspicious DB record
+    post = SuspiciousPost(
+
+        source=source,
+
+        image_path=path,
+
+        authorized=authorized
+    )
+
+    # Store suspicious post
+    db.add(post)
+
+    db.commit()
+
+    db.refresh(post)
+
+    db.close()
+
+    return {
+
+        "message":"Suspicious post uploaded",
+
+        "source": source
+    }
 
 @app.get("/")
 def root():

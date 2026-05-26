@@ -60,6 +60,8 @@ function Dashboard() {
 
     }, [])
 
+
+
      // Total alerts detected
     const totalAlerts = alerts.filter(
       alert => alert.alert
@@ -70,9 +72,9 @@ function Dashboard() {
       alert => alert.severity === "HIGH"
     ).length
 
-    // Authorized usages
+    // Authorized partner usages
     const authorizedUsage = alerts.filter(
-      alert => alert.alert === false
+      alert => alert.message === "Authorized usage"
     ).length
 
   return (
@@ -103,6 +105,50 @@ function Dashboard() {
 
         </div>
 
+        {
+          loading && (
+
+            <section className="
+              mt-8
+              bg-zinc-900
+              border
+              border-zinc-800
+              p-6
+              rounded-2xl
+            ">
+
+              <h2 className="text-xl font-semibold">
+                Loading Dashboard...
+              </h2>
+
+            </section>
+          )
+        }
+
+        {
+          error && (
+
+            <section className="
+              mt-8
+              bg-red-950
+              border
+              border-red-500
+              p-6
+              rounded-2xl
+            ">
+
+              <h2 className="text-xl font-semibold text-red-400">
+                Dashboard Error
+              </h2>
+
+              <p className="text-zinc-300 mt-2">
+                {error}
+              </p>
+
+            </section>
+          )
+        }
+
         <div className="mt-12">
 
           <h2 className="text-2xl font-bold mb-6">
@@ -113,7 +159,7 @@ function Dashboard() {
             alerts.map((alert, index) => (
 
               <AlertCard
-                key={index}
+                key={`${alert.source}-${index}`}
 
                 severity={alert.severity}
 

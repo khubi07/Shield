@@ -2,6 +2,7 @@ from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import String
 from sqlalchemy import DateTime
+from sqlalchemy import Boolean
 
 from datetime import datetime
 
@@ -28,6 +29,28 @@ class Asset(Base):
     watermark_text = Column(String)
 
     protected_path = Column(String)
+
+    created_at = Column(
+        DateTime,
+        default=datetime.utcnow
+    )
+
+# Stores suspicious monitored media
+class SuspiciousPost(Base):
+
+    __tablename__ = "suspicious_posts"
+
+    id = Column(
+        Integer,
+        primary_key=True,
+        index=True
+    )
+
+    source = Column(String)
+
+    image_path = Column(String)
+
+    authorized = Column(Boolean)
 
     created_at = Column(
         DateTime,

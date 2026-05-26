@@ -9,6 +9,7 @@ import Alerts from "./pages/Alerts"
 import Dashboard from "./pages/Dashboard"
 import RegisterAsset from "./pages/RegisterAsset"
 import CheckOriginality from "./pages/CheckOriginality"
+import UploadSuspiciousPost from "./pages/UploadSuspiciousPost"
 
 function App() {
 
@@ -37,6 +38,11 @@ function App() {
           <Route
             path="/alerts"
             element={<Alerts />}
+          />
+
+          <Route
+            path="/upload-suspicious-post"
+            element={<UploadSuspiciousPost />}
           />
 
         </Routes>
