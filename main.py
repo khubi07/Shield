@@ -12,9 +12,20 @@ from app.database.models import Asset
 from app.database.models import SuspiciousPost
 from app.services.watermark import embed_watermark
 from fastapi import Form
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(
     title="Digital Asset Protection API"
+)
+
+# Expose uploaded media publicly
+app.mount(
+
+    "/app/uploads",
+
+    StaticFiles(directory="app/uploads"),
+
+    name="uploads"
 )
 
 # Create DB tables
@@ -262,8 +273,10 @@ async def upload_suspicious_post(
 
     source: str = Form(...),
 
-    authorized: bool = Form(...)
+    authorized: str = Form(...)
 ):
+    # Convert frontend string into Python boolean
+    authorized = authorized.lower() == "true" # type: ignore
 
     db = SessionLocal()
 
@@ -309,6 +322,10 @@ async def upload_suspicious_post(
 
         "source": source
     }
+
+# ---------------------------------
+# upload suspicious post
+# ---------------------------------
 
 @app.get("/")
 def root():

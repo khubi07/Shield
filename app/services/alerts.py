@@ -1,4 +1,5 @@
 from app.services.matcher import check_originality
+from app.services.forgery import detect_forgery
 
 
 def trigger_alert(
@@ -10,6 +11,11 @@ def trigger_alert(
 
     result = check_originality(
         original_img,
+        suspect_img
+    )
+
+    # Analyze image manipulation
+    forgery_result = detect_forgery(
         suspect_img
     )
 
@@ -26,6 +32,27 @@ def trigger_alert(
             "message":"Authorized usage",
             "detection":result
         }
+    # High-risk manipulated media
+    if forgery_result[
+        "forgery_detected"
+    ]:
+
+        return {
+
+            "alert": True,
+
+            "severity": "HIGH",
+
+            "reason": "Potential forged or manipulated media detected",
+
+            "source": source_name,
+
+            "detection": result,
+
+            "forgery": forgery_result
+        }
+
+
     # strongest evidence case
     
     if status=="Watermark Verified":
@@ -59,7 +86,8 @@ def trigger_alert(
             "source":source_name,
             "detection":result
         }
-
+    
+    
 
     return {
         "alert":False,

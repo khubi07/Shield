@@ -1,558 +1,381 @@
-# 🛡️ Shield — Digital Asset Protection System (MVP)
+# SHIELD — AI-Powered Sports Media Protection Platform
 
-## Overview
+SHIELD is an AI-powered digital asset protection platform designed for sports media organizations, creators, and teams to detect unauthorized reuse of protected digital content.
 
-Shield is a hybrid digital asset protection system built for the **Google Solution Challenge** problem statement:
-
-**Protecting the Integrity of Digital Sports Media**
-
-It helps detect and flag unauthorized use of sports media using:
-
-* Invisible watermarking (proactive protection)
-* Multi-signal fingerprinting (reactive detection)
-* Misuse alerting and monitoring
-* Ownership verification and traceability
+The platform uses invisible watermarking, image fingerprinting, similarity analysis, and monitoring pipelines to identify suspicious reposts and generate real-time threat alerts.
 
 ---
 
-# Problem We Are Solving
+## Problem Statement
 
-Sports organizations publish high-value digital media (photos, highlights, graphics).
+Sports organizations and media creators frequently face unauthorized reposting, content theft, and misuse of digital assets across online platforms.
 
-Problems:
+Traditional copyright systems are slow, manual, and difficult to scale.
 
-* Unauthorized reposting
-* Digital piracy
-* Misappropriation of media
-* Modified copies (cropped, meme overlays, compression)
-* Hard to prove ownership at scale
-
-Shield addresses this using a layered verification pipeline.
+SHIELD solves this problem using AI-driven media verification and monitoring pipelines.
 
 ---
 
-# Core Architecture
+## Features
 
-## Detection Pipeline
-
-```text
-Suspicious Media Input
-│
-├── Step 1: Watermark Verification
-│      If embedded watermark exists:
-│         → Ownership Confirmed
-│         → High Severity Alert
-│
-└── Step 2: Fingerprint Matching (fallback)
-       ├── pHash Similarity
-       ├── ORB Feature Matching
-       └── Histogram Similarity
-
-Combined Confidence Score
-│
-├── Likely Match
-├── Needs Review
-└── No Match
-
-↓
-Authorization Check
-↓
-Alert Generation
-```
+* Register and protect digital sports assets
+* Invisible watermark embedding
+* Image fingerprint similarity analysis
+* Originality verification system
+* Suspicious media upload pipeline
+* Dynamic alert generation
+* Monitoring dashboard analytics
+* SQLite-powered asset registry
+* Backend-driven security monitoring
+* Protected asset management system
 
 ---
 
-# Key Features
+## Tech Stack
 
-## 1. Asset Registration
+### Frontend
 
-Upload original media and:
+* React.js
+* Tailwind CSS
+* Axios
 
-* Generate invisible watermark
-* Generate content fingerprint
-* Register protected asset
+### Backend
 
----
-
-## 2. Watermark Protection
-
-MVP uses:
-
-* LSB invisible watermarking
-
-Embedded watermark:
-
-* `SHIELD` (placeholder for MVP)
-
-Future:
-
-* Frequency-domain watermarking (DCT/DWT)
-
----
-
-## 3. Multi-Signal Fingerprinting
-
-Uses 3 signals:
-
-### a) Perceptual Hash (pHash)
-
-Detects:
-
-* Similar images
-* Compression changes
-* Minor edits
-
----
-
-### b) ORB Feature Matching
-
-Detects:
-
-* Structural similarity
-* Crops
-* Keypoint overlap
-
----
-
-### c) Histogram Similarity
-
-Detects:
-
-* Visual/color distribution similarity
-* Some edited versions
-
----
-
-## Combined Similarity Score
-
-Weighted ensemble:
-
-```python
-final_score = (
- pHash*0.3 +
- ORB*0.3 +
- Histogram*0.4
-)
-```
-
-Thresholds:
-
-* > =75 → Likely Match
-* 55–75 → Needs Review
-* <55 → No Match
-
----
-
-## 4. Alert Engine
-
-Severity levels:
-
-### HIGH
-
-Triggered if:
-
-* Watermark Verified
-* Strong unauthorized match
-
----
-
-### MEDIUM
-
-Triggered if:
-
-* Suspicious modified content needs review
-
----
-
-## 5. Monitoring Scan (Simulated Content Discovery)
-
-Current MVP simulates discovered external content:
-
-Cases tested:
-
-* Watermarked misuse
-* Modified suspicious reuse
-* Authorized reuse
-* Unrelated content (negative test)
-
----
-
-# Current Project Structure
-
-```bash
-Shield/
-│
-├── app/
-│   ├── __init__.py
-│   │
-│   ├── uploads/
-│   │
-│   └── services/
-│       ├── __init__.py
-│       ├── fingerprint.py
-│       ├── watermark.py
-│       ├── matcher.py
-│       ├── alerts.py
-│       └── scanner.py
-│
-├── main.py
-├── requirements.txt
-└── README.md
-```
-
----
-
-# Backend Modules
-
-## fingerprint.py
-
-Contains:
-
-* pHash similarity
-* ORB matching
-* Histogram similarity
-* Combined scoring
-
----
-
-## watermark.py
-
-Contains:
-
-* Watermark embedding
-* Watermark extraction
-* Watermark verification
-
----
-
-## matcher.py
-
-Decision engine:
-
-Flow:
-
-```text
-Check watermark first
-If found:
-  Watermark Verified
-Else:
-  Run fingerprint similarity
-```
-
----
-
-## alerts.py
-
-Generates:
-
-* High severity alerts
-* Medium review alerts
-* Authorized usage pass-through
-
----
-
-## scanner.py
-
-Simulates monitored external content feed.
-
----
-
-# API Endpoints
-
-## Register Asset
-
-```http
-POST /register-asset
-```
-
-Registers media and embeds watermark.
-
----
-
-## Check Originality
-
-```http
-POST /check-originality
-```
-
-Checks suspicious media.
-
-Possible outputs:
-
-Watermark route:
-
-```json
-{
- "status":"Watermark Verified",
- "ownership":"Confirmed"
-}
-```
-
-Fingerprint route:
-
-```json
-{
- "combined":62.98,
- "status":"Needs Review"
-}
-```
-
----
-
-## Monitoring Scan
-
-```http
-GET /run-scan
-```
-
-Returns simulated alerts.
-
----
-
-## Health Check
-
-```http
-GET /
-```
-
-Returns:
-
-```json
-{
- "status":"API Running"
-}
-```
-
----
-
-# Tech Stack
-
-## Backend
-
-* Python
 * FastAPI
-* Uvicorn
+* Python
 
----
+### Database
 
-## Computer Vision
+* SQLite
+* SQLAlchemy ORM
+
+### AI / Computer Vision
 
 * OpenCV
-* Pillow
-* ImageHash
-* NumPy
-
----
-
-## Detection Techniques
-
-* LSB Watermarking
-* Perceptual Hashing
+* Image Hashing (pHash)
 * ORB Feature Matching
 * Histogram Similarity
 
 ---
 
-# Installation
+## System Workflow
 
-## Clone Repo
-
-```bash
-git clone <https://github.com/khubi07/Shield.git>
-cd Shield
-```
-
----
-
-## Create Virtual Environment
-
-### Windows
-
-```bash
-python -m venv venv
-venv\Scripts\activate
-```
-
-### Mac/Linux
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
+Protected Asset Registration
+→ Watermark Embedding
+→ Asset Storage in Database
+→ Suspicious Media Monitoring
+→ Similarity Analysis
+→ Threat Detection
+→ Alert Generation
+→ Dashboard Analytics
 
 ---
 
-## Install Dependencies
+## Architecture
+
+### Protected Assets Database
+
+Stores:
+
+* asset metadata
+* owner information
+* sport category
+* protected media paths
+
+### Suspicious Posts Database
+
+Simulates monitored social media content and suspicious reposts.
+
+### Monitoring Engine
+
+Compares suspicious uploads against protected assets using:
+
+* watermark extraction
+* image fingerprinting
+* similarity scoring
+
+---
+
+## Future Scope
+
+* Real social media API integrations
+* Advanced frequency-domain watermarking
+* ML-based media forgery detection
+* Real-time monitoring pipelines
+* Cloud deployment
+* Multi-user authentication system
+* Distributed media scanning
+
+---
+
+## Installation
+
+### Backend
 
 ```bash
+cd backend
 pip install -r requirements.txt
-```
-
----
-
-## Run Backend
-
-```bash
 uvicorn main:app --reload
 ```
 
-API:
-
-```text
-http://127.0.0.1:8000
-```
-
-Swagger Docs:
-
-```text
-http://127.0.0.1:8000/docs
-```
-
----
-
-# Test Modules Individually
-
-Run package modules:
+### Frontend
 
 ```bash
-python -m app.services.watermark
-```
-
-```bash
-python -m app.services.matcher
-```
-
-```bash
-python -m app.services.scanner
-```
-
-Important:
-Use:
-
-```bash
-python -m app.services.module_name
-```
-
-not:
-
-```bash
-python file.py
-```
-
-for package imports.
-
----
-
-# Example Validation Results
-
-## Same Image
-
-```text
-100%
-Likely Match
+cd frontend
+npm install
+npm run dev
 ```
 
 ---
+# SHIELD — AI-Powered Sports Media Protection Platform
 
-## Modified Copy
+SHIELD is an AI-powered digital asset protection platform designed for sports organizations, creators, and media teams to detect unauthorized reuse, reposting, and manipulation of protected digital content.
 
-```text
-62.98%
-Needs Review
-```
+The platform combines invisible watermarking, computer vision similarity analysis, forgery detection, monitoring pipelines, and dynamic threat analytics to secure sports media assets.
 
 ---
 
-## Watermarked Repost
+# Problem Statement
 
-```text
-Watermark Verified
-HIGH Alert
-```
+Sports organizations and digital creators frequently face:
 
----
+* Unauthorized reposting of media assets
+* Content theft across online platforms
+* Manipulated or forged sports posters
+* Lack of scalable media verification systems
 
-## Different Image
+Traditional copyright systems are manual, slow, and difficult to monitor at scale.
 
-```text
-No Match
-No Alert
-```
+SHIELD addresses this problem using AI-powered media verification and monitoring workflows.
 
 ---
 
-# Frontend Plan (Upcoming)
+# Core Features
 
-React dashboard will include:
+## Protected Asset Registration
 
-* Dashboard
-* Register Asset
-* Check Originality
-* Alerts Monitoring
-* Evidence View
+* Upload and register sports media assets
+* Store ownership metadata
+* Generate protected media versions
+
+---
+
+## Invisible Watermarking
+
+* LSB-based invisible watermark embedding
+* Ownership verification pipeline
+* Watermark extraction support
+
+---
+
+## AI-Powered Originality Detection
+
+* Perceptual Hash (pHash) similarity
+* ORB feature matching
+* Histogram similarity analysis
+* Combined similarity scoring engine
+
+---
+
+## Forgery & Manipulation Detection
+
+* Error Level Analysis (ELA)
+* AI-assisted tampering detection
+* Manipulated media identification
+
+---
+
+## Suspicious Media Monitoring
+
+* Upload suspicious social-media-style posts
+* Dynamic monitoring pipeline
+* Automated comparison against protected assets
+
+---
+
+## Threat Intelligence Dashboard
+
+* High-severity alert generation
+* Authorized usage detection
+* Monitoring analytics
+* Protected asset management
+
+---
+
+# Tech Stack
+
+## Frontend
+
+* React.js
+* Tailwind CSS
+* Axios
+* React Router
+
+---
+
+## Backend
+
+* FastAPI
+* Python
+
+---
+
+## Database
+
+* SQLite
+* SQLAlchemy ORM
+
+---
+
+## AI / Computer Vision
+
+* OpenCV
+* Image Hashing (pHash)
+* ORB Feature Matching
+* Histogram Similarity
+* Error Level Analysis (ELA)
+
+---
+
+# System Architecture
+
+## Protected Assets Database
+
+Stores:
+
+* asset metadata
+* owner information
+* sport category
+* media category
+* protected media paths
+
+---
+
+## Suspicious Posts Database
+
+Stores monitored suspicious media content for analysis.
+
+---
+
+## Monitoring Engine
+
+Compares suspicious posts against protected assets using:
+
+* watermark verification
+* fingerprint similarity
+* forgery analysis
+* threat scoring
+
+---
+
+# System Workflow
+
+Protected Asset Registration
+→ Watermark Embedding
+→ Database Storage
+→ Suspicious Media Upload
+→ Monitoring Scan
+→ Similarity Analysis
+→ Forgery Detection
+→ Threat Intelligence
+→ Dashboard Analytics
+
+---
+
+# Key Functionalities
+
+* Asset ownership verification
+* Unauthorized repost detection
+* Suspicious media monitoring
+* Forgery detection workflows
+* Dynamic alert generation
+* Backend-driven dashboard analytics
 
 ---
 
 # Future Scope
 
-Planned upgrades:
-
-## Watermarking
-
-* DCT watermarking
-* DWT watermarking
-* Robust watermark survival
-
----
-
-## Detection
-
-* Deep visual embeddings
-* Video fingerprinting
-* Better transformation analysis
+* Real social media API integrations
+* Advanced frequency-domain watermarking
+* Deep learning-based forgery detection
+* Real-time monitoring pipelines
+* Cloud deployment
+* Multi-user authentication system
+* Distributed media scanning
 
 ---
 
-## Monitoring
+# Installation
 
-* Real web crawling
-* Social platform APIs
-* Real-time alerts
+## Backend Setup
 
----
-
-# Team Notes
-
-## Current MVP Focus
-
-We intentionally prioritize:
-
-* Working prototype
-* Clear detection pipeline
-* Demonstrable proof-of-concept
-
-Over:
-
-* Production-scale crawling
-* Enterprise-grade watermarking
-* Heavy ML models
-
-
-## Demo / Pitch
-
-Focus:
-
-* Problem framing
-* Solution walkthrough
-* Future roadmap
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
 
 ---
 
-# Elevator Pitch
+## Frontend Setup
 
-Shield creates a digital identity layer for sports media using invisible watermarking and multi-signal content fingerprinting, enabling organizations to authenticate media, detect unauthorized reuse, and monitor content propagation in near real-time.
-
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
 ---
 
-Built for Google Solution Challenge 🚀 by team Shield
+# Project Structure
+
+```bash
+SHIELD/
+│
+├── backend/
+│   ├── app/
+│   │   ├── services/
+│   │   ├── database/
+│   │   ├── models/
+│   │   └── uploads/
+│   │
+│   ├── main.py
+│   └── requirements.txt
+│
+├── frontend/
+│   ├── src/
+│   │   ├── pages/
+│   │   ├── components/
+│   │   ├── services/
+│   │   └── data/
+│   │
+│   └── package.json
+│
+└── README.md
+```
+
+---
+
+# Screenshots
+
+## Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+---
+
+## Register Asset
+
+![Register Asset](screenshots/register-asset.png)
+
+---
+
+## Originality Detection
+
+![Originality](screenshots/check-originality.png)
+
+---
+
+## Suspicious Media 
+
+![Monitoring](screenshots/suspicious-post.png)

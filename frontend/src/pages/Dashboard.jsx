@@ -15,6 +15,8 @@ function Dashboard() {
   // API failure state
   const [error, setError] = useState("")
 
+  // Stores protected registered assets
+  const [assets, setAssets] = useState([])
   useEffect(() => {
 
       const loadDashboard = async () => {
@@ -34,6 +36,13 @@ function Dashboard() {
 
           // Store backend alerts
           setAlerts(response.data)
+
+          // Fetch protected registered assets
+          const assetsResponse = await api.get("/assets")
+          setAssets(assetsResponse.data)
+
+          // Store protected assets
+          setAssets(assetsResponse.data)
 
         }
 
@@ -154,6 +163,85 @@ function Dashboard() {
           <h2 className="text-2xl font-bold mb-6">
             Recent Alerts
           </h2>
+
+          <div className="mt-14">
+
+            <h2 className="
+              text-2xl
+              font-bold
+              mb-6
+            ">
+              Protected Assets
+            </h2>
+
+            <div className="
+              grid
+              md:grid-cols-2
+              gap-6
+            ">
+
+              {
+                assets.map((asset) => (
+
+                  <article
+                    key={asset.id}
+                    className="
+                      bg-zinc-900
+                      border
+                      border-zinc-800
+                      p-6
+                      rounded-2xl
+                    "
+                  >
+
+                    {/* Asset filename */}
+                    <h3 className="
+                      text-xl
+                      font-semibold
+                    ">
+                      {asset.filename}
+                    </h3>
+
+                    {/* Asset owner */}
+                    <p className="text-zinc-400 mt-3">
+
+                      Owner:
+
+                      <span className="ml-2 text-white">
+                        {asset.owner_name}
+                      </span>
+
+                    </p>
+
+                    {/* Sports category */}
+                    <p className="text-zinc-400 mt-2">
+
+                      Sport:
+
+                      <span className="ml-2 text-white">
+                        {asset.sport_type}
+                      </span>
+
+                    </p>
+
+                    {/* Media category */}
+                    <p className="text-zinc-400 mt-2">
+
+                      Type:
+
+                      <span className="ml-2 text-white">
+                        {asset.asset_type}
+                      </span>
+
+                    </p>
+
+                  </article>
+                ))
+              }
+
+            </div>
+
+          </div>
 
           {
             alerts.map((alert, index) => (
