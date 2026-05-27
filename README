@@ -379,3 +379,10 @@ SHIELD/
 ## Suspicious Media 
 
 ![Monitoring](screenshots/suspicious-post.png)
+
+## Live Demo
+
+Frontend: shield-rust.vercel.app
+
+Backend API Docs:
+https://shield-1-fesh.onrender.com/docs
